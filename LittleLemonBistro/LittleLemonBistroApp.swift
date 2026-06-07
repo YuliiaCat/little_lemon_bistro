@@ -1,10 +1,3 @@
-//
-//  LittleLemonBistroApp.swift
-//  LittleLemonBistro
-//
-//  Created by Yuliia Berezniak on 2026-06-03.
-//
-
 import SwiftUI
 
 @main

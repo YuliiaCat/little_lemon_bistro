@@ -1,10 +1,3 @@
-//
-//  LittleLemonBistroUITestsLaunchTests.swift
-//  LittleLemonBistroUITests
-//
-//  Created by Yuliia Berezniak on 2026-06-03.
-//
-
 import XCTest
 
 final class LittleLemonBistroUITestsLaunchTests: XCTestCase {
