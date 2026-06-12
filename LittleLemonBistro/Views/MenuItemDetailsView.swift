@@ -11,7 +11,6 @@ struct MenuItemDetailsView: View {
             .fontWeight(.bold)
             .frame(maxWidth: .infinity, alignment: .leading)
             
-//            Image("LittleLemonlogo")
             Image(item.image)
                 .resizable()
                 .scaledToFit()

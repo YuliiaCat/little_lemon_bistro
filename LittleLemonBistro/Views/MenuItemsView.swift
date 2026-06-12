@@ -1,7 +1,37 @@
 import SwiftUI
 
 struct MenuItemsView: View {
-    @State private var showFilterSheet = false
+    @State var showFilterSheet = false
+    @State var selectedCategory: SelectedCategories? = nil
+    @State var selectedSort: SortMenuItems? = nil
+    
+    private func getSortedItems(items: [MenuItem]) -> [MenuItem] {
+        switch selectedSort {
+            case .alphabet:
+                return items.sorted { $0.title < $1.title }
+
+            case .price:
+                return items.sorted { $0.price < $1.price }
+
+            case .mostPopular:
+                return items.sorted { $0.ordersCount > $1.ordersCount }
+
+            case nil:
+                return items
+            }
+    }
+    
+    private var filteredFood: [MenuItem] {
+        getSortedItems(items: MockMenuItems.foodItems)
+    }
+    
+    private var filteredDrinks: [MenuItem] {
+        getSortedItems(items: MockMenuItems.drinkItems)
+    }
+    
+    private var filteredDesserts: [MenuItem] {
+        getSortedItems(items: MockMenuItems.dessertItems)
+    }
     
     var body: some View {
         NavigationStack {
@@ -9,7 +39,7 @@ struct MenuItemsView: View {
                 VStack {
                     HStack {
                         Spacer()
-                        Button(role: .confirm) {
+                        Button() {
                             showFilterSheet = true
                         } label: {
                             Image(systemName: "slider.horizontal.3")
@@ -32,21 +62,28 @@ struct MenuItemsView: View {
                
                 
                 ScrollView {
-                    MenuItemComponent(text: "Food", items: MockMenuItems.foodItems)
-                    MenuItemComponent(text: "Drinks", items: MockMenuItems.drinkItems)
-                    MenuItemComponent(text: "Dessert", items: MockMenuItems.dessertItems)
+                    if selectedCategory == .food {
+                        MenuItemComponent(text: "Food", items: filteredFood)
+                    } else if selectedCategory == .drink {
+                        MenuItemComponent(text: "Drinks", items: filteredDrinks)
+                    } else if selectedCategory == .dessert {
+                        MenuItemComponent(text: "Dessert", items: filteredDesserts)
+                    } else {
+                        MenuItemComponent(text: "Food", items: filteredFood)
+                        MenuItemComponent(text: "Drinks", items: filteredDrinks)
+                        MenuItemComponent(text: "Dessert", items: filteredDesserts)
+                    }
                     
                 }
-                .listStyle(.plain)
-                .scrollContentBackground(.hidden)
                 .background(Color.clear)
                 .padding(.bottom, 30)
                 .padding(.top, 10)
                 .padding(.horizontal, 20)
+                .scrollIndicators(.hidden)
             }
         }
         .sheet(isPresented: $showFilterSheet) {
-            MenuItemsOptionView()
+            MenuItemsOptionView(showFilterSheet: $showFilterSheet, selectedCategory: $selectedCategory, selectedSort: $selectedSort)
                 .presentationDetents([.large, .large])
                 .presentationDragIndicator(.visible)
         }
